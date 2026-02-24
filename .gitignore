@@ -1,0 +1,56 @@
+############################
+# Node / Frontend (Vite)
+############################
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+dist/
+*.local
+
+# Vite / React
+frontend/node_modules/
+frontend/dist/
+
+############################
+# Environment & Secrets
+############################
+.env
+.env.*
+*.env.local
+
+############################
+# Logs
+############################
+logs/
+*.log
+*.gz
+
+############################
+# OS / Editor
+############################
+.DS_Store
+Thumbs.db
+*.swp
+.vscode/
+.idea/
+
+############################
+# .NET / C#
+############################
+bin/
+obj/
+**/bin/
+**/obj/
+*.user
+*.suo
+*.userprefs
+.vs/
+
+############################
+# Docker / Infra
+############################
+infra/**/data/
+infra/**/volume/
+

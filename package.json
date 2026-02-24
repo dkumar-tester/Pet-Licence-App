@@ -1,0 +1,11 @@
+{
+  "name": "pet-licence-app-root",
+  "private": true,
+  "scripts": {
+    "dev": "npm run dev --prefix frontend",
+    "frontend:dev": "npm run dev --prefix frontend",
+    "frontend:build": "npm run build --prefix frontend",
+    "frontend:preview": "npm run preview --prefix frontend"
+  }
+}
+
