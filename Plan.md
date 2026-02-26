@@ -11,9 +11,10 @@ Build a full-stack application to automate the pet registration lifecycle: from 
 
 ## Core Features & Workflow
 - **Public Submission (Figma-aligned 3-step wizard):**
-  - **Step 1 – Owner:** Collect owner details (full name, primary residential address, optional secondary address for where the dog is kept, email, phone) and trigger 6-digit OTP identity verification.
-  - **Step 2 – Pet:** Collect pet details exactly as defined in the Figma `Pet` step (name, species, breed, sex, age/DOB, color/markings, spay/neuter status, microchip/license fields, etc.).
-  - **Step 3 – Payment:** Capture payment details and show a fee summary exactly as in the Figma `Payment` step.
+  - **Step 1 – Owner Registration:** Collect full name, primary residential address, optional secondary address (if dog is kept elsewhere), email, and phone, then trigger 6-digit OTP identity verification.
+  - **Step 2 – Pet Profile:** Collect dog's name, breed, age, color, sex (male/female), hair length (short/med/long), spayed/neutered status, clinic name, and vet name.
+  - **Step 3 – Checkout / Payment:** Capture payment details (cardholder name, card number, expiry, CVC) and show a $15.00 registration fee summary.
+  - **Final – Confirmation:** Display provisional license with details (License Number, Dog's Name, Owner's Name, Registration Date) and a QR code for verification.
   - **Validation:** Zod-based validation on each step before allowing progression.
   - **UI Source of Truth:** Layout, labels, and visual styling taken from the `pet-registration` Figma prototype (`https://stony-view-58011787.figma.site/`).
 - **Identity Verification:**
@@ -22,20 +23,19 @@ Build a full-stack application to automate the pet registration lifecycle: from 
   - Application queue with "Review/Approve/Reject" capabilities.
   - Status-driven workflow (Submitted → Under Review → Approved → Paid → Completed).
   - Automated **Provisional License** generation (PDF/Download) upon approval.
-- **Financials:** - Stripe integration for registration fees.
-  - Success screen with QR code for license verification.
-- **Analytics:** - Admin dashboard with monthly application metrics and status breakdowns.
+- **Financials:** 
+  - Stripe integration for registration fees.
+- **Analytics:** 
+  - Admin dashboard with monthly application metrics and status breakdowns.
 - **Audit:**
   - Immutable logs for every status change and admin action.
 
 ## Next Steps
-- [ ] **Infrastructure:** Setup `docker-compose` for PostgreSQL and initialize the .NET 8 Web API project.
-- [ ] **Database Schema:** Define `PetApplication`, `ApplicationStatus` Enum, and `AuditLog` entities.
+- [x] **Infrastructure:** Setup `docker-compose` for PostgreSQL and initialize the .NET 8 Web API project.
+- [x] **Frontend Scaffold:** Initialize the React frontend (Vite), Tailwind CSS, and shadcn/ui theme.
+- [x] **Public UI – 3-Step Wizard:** Implemented the Figma-aligned `Owner` → `Pet` → `Payment` registration wizard along with Zod validation.
+- [x] **Success Page UI:** Implemented the confirmation screen with provisional license details and QR code exactly matching Figma.
+- [ ] **Database Schema:** Expand `PetApplication` entity to include newly identified Figma fields (SecondaryAddress, Age, Color, Sex, HairLength, SpayedNeutered, ClinicName, VetName).
 - [ ] **API Layer:** Implement the "Submit Application" and "Identity Verification" endpoints required by the public 3-step wizard.
-- [ ] **Frontend Scaffold:** Initialize the React frontend (Vite), Tailwind CSS, and shadcn/ui theme.
-- [ ] **Public UI – 3-Step Wizard:** Implement the Figma-aligned `Owner` → `Pet` → `Payment` registration wizard with:
-  - Shared stepper component (3 steps, with active/completed/disabled states) at the top of the page.
-  - Three form steps mirroring the Figma frames (field labels, button text, spacing, and layout).
-  - Zod validation per step and progression only on valid input.
 - [ ] **Admin Flow:** Build the back-office dashboard and approval logic.
-- [ ] **Closing the Loop:** Integrate Stripe webhooks, license fee collection, provisional license PDF/QR generation, and success screen.
+- [ ] **Closing the Loop:** Integrate Stripe webhooks, license fee collection, provisional license PDF/QR generation, and hook up frontend API calls instead of mocks.
