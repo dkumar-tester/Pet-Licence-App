@@ -9,7 +9,7 @@ body,
 }
 
 body {
-  @apply bg-slate-950 text-slate-50 antialiased;
+  @apply bg-gradient-to-br from-[#e3f0ff] via-[#f5f0ff] to-[#c7f5e9] text-slate-900 antialiased;
 }
 
 .mesh-bg {

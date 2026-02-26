@@ -3,24 +3,23 @@ import { Link, Outlet } from "react-router-dom";
 
 export const Layout: React.FC = () => {
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-50">
-      <div className="pointer-events-none fixed inset-0 opacity-60">
-        <div className="mesh-bg absolute inset-0" />
-      </div>
-
-      <header className="relative z-10 border-b border-slate-800 bg-slate-950/80 backdrop-blur">
-        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <div className="min-h-screen">
+      <header className="relative z-10 border-b border-slate-200 bg-white/80 backdrop-blur">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4 text-slate-900">
           <Link to="/" className="text-lg font-semibold tracking-tight">
             Pet Licence
           </Link>
-          <nav className="flex gap-4 text-sm text-slate-300">
-            <Link to="/apply" className="hover:text-slate-50">
+          <nav className="flex gap-4 text-sm text-slate-500">
+            <Link to="/apply" className="hover:text-slate-900">
               Apply
             </Link>
-            <Link to="/admin/applications" className="hover:text-slate-50">
+            <Link
+              to="/admin/applications"
+              className="hover:text-slate-900"
+            >
               Admin
             </Link>
-            <Link to="/admin/dashboard" className="hover:text-slate-50">
+            <Link to="/admin/dashboard" className="hover:text-slate-900">
               Analytics
             </Link>
           </nav>

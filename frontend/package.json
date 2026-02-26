@@ -14,7 +14,8 @@
     "@tanstack/react-router": "latest",
     "axios": "latest",
     "class-variance-authority": "latest",
-    "clsx": "latest",
+    "clsx": "^2.1.1",
+    "date-fns": "^4.1.0",
     "lucide-react": "latest",
     "pet-licence-app-root": "file:..",
     "qrcode.react": "latest",
@@ -22,10 +23,12 @@
     "react-dom": "latest",
     "react-hook-form": "latest",
     "react-router-dom": "latest",
-    "tailwind-merge": "latest",
+    "tailwind-merge": "^3.5.0",
     "zod": "latest"
   },
   "devDependencies": {
+    "@types/react": "^19.2.14",
+    "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react-swc": "latest",
     "autoprefixer": "^10.4.20",
     "postcss": "^8.4.49",
