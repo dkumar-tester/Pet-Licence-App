@@ -31,11 +31,11 @@ Build a full-stack application to automate the pet registration lifecycle: from 
   - Immutable logs for every status change and admin action.
 
 ## Next Steps
-- [x] **Infrastructure:** Setup `docker-compose` for PostgreSQL and initialize the .NET 8 Web API project.
+- [x] **Infrastructure:** Setup `docker-compose` for PostgreSQL (verified on port 5433) and initialized the .NET 8 Web API project.
 - [x] **Frontend Scaffold:** Initialize the React frontend (Vite), Tailwind CSS, and shadcn/ui theme.
 - [x] **Public UI – 3-Step Wizard:** Implemented the Figma-aligned `Owner` → `Pet` → `Payment` registration wizard along with Zod validation.
 - [x] **Success Page UI:** Implemented the confirmation screen with provisional license details and QR code exactly matching Figma.
-- [ ] **Database Schema:** Expand `PetApplication` entity to include newly identified Figma fields (SecondaryAddress, Age, Color, Sex, HairLength, SpayedNeutered, ClinicName, VetName).
-- [ ] **API Layer:** Implement the "Submit Application" and "Identity Verification" endpoints required by the public 3-step wizard.
-- [ ] **Admin Flow:** Build the back-office dashboard and approval logic.
-- [ ] **Closing the Loop:** Integrate Stripe webhooks, license fee collection, provisional license PDF/QR generation, and hook up frontend API calls instead of mocks.
+- [x] **Database Schema:** Expanded `PetApplication` and `AuditLog` entities and successfully applied the schema to the Docker database.
+- [x] **API Layer:** Implemented and verified the "Submit Application" and "Identity Verification" endpoints required by the public wizard.
+- [ ] **Admin Flow:** Build the back-office dashboard and application review logic.
+- [ ] **Closing the Loop:** Integrate Stripe webhooks for actual payment processing and auto-generate the license PDF.

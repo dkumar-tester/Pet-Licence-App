@@ -27,7 +27,8 @@ import {
 import {
   submitApplication,
   verifyOtp,
-  PetApplicationFormValues,
+  sendOtp,
+  SubmitApplicationRequest,
 } from "../lib/publicApi";
 import { cn } from "../lib/utils";
 
@@ -55,11 +56,28 @@ type Step = "owner" | "pet" | "payment" | "verify";
 
 export const ApplyPage: React.FC = () => {
   const [step, setStep] = useState<Step>("owner");
-  const [applicationId, setApplicationId] = useState<string | null>(null);
   const [otpCode, setOtpCode] = useState("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const handleSendOtp = async () => {
+    const isValid = await form.trigger([
+      "fullName", "primaryAddress", "dogAtDifferentAddress", "secondaryAddress", "email", "phone"
+    ]);
+    if (!isValid) return;
+
+    try {
+      setLoading(true);
+      setError(null);
+      await sendOtp(form.getValues("email"));
+      setStep("verify");
+    } catch (e: any) {
+      setError(e.message || "Failed to send code");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const form = useForm<ApplicationFormValues>({
     resolver: zodResolver(petApplicationSchema),
@@ -83,29 +101,41 @@ export const ApplyPage: React.FC = () => {
   });
 
   const handleSubmit = async (values: ApplicationFormValues) => {
-    if (step === "owner") {
-      setStep("verify");
-      setApplicationId("demo-id-" + Math.floor(Math.random() * 10000));
-      return;
-    }
-    if (step === "pet") {
-      setStep("payment");
-      return;
-    }
+    if (step !== "payment") return;
 
-    // Payment step completes the application flow
     try {
       setLoading(true);
       setError(null);
-      // Mock submitting since backend isn't ready
-      setTimeout(() => {
-        const fakeAppId = applicationId || ("demo-id-" + Math.floor(Math.random() * 10000));
-        navigate(`/success/${fakeAppId}`);
-      }, 1000);
+
+      const nameParts = values.fullName.trim().split(" ");
+      const parsedAge = values.age === "1 Year" ? 1 : values.age === "2 Years" ? 2 : values.age === "3+ Years" ? 3 : null;
+
+      const req: SubmitApplicationRequest = {
+        firstName: nameParts[0] || "",
+        lastName: nameParts.slice(1).join(" ") || "Unknown",
+        email: values.email || "",
+        phone: values.phone || "",
+        primaryAddress: values.primaryAddress || "",
+        secondaryAddress: values.dogAtDifferentAddress ? (values.secondaryAddress || "") : null,
+        petName: values.petName || "",
+        petType: "Dog", // Hardcoded for this wizard flow
+        breed: values.breed || "",
+        age: parsedAge || 0,
+        color: values.color !== "Select" ? (values.color || "") : "",
+        sex: values.sex || "",
+        hairLength: values.hairLength || "",
+        spayedNeutered: values.spayedNeutered || false,
+        clinicName: values.clinicName || "",
+        vetName: values.vetName || "",
+      };
+
+      const result = await submitApplication(req);
+      navigate(`/success/${result.applicationId}`);
+
     } catch (e: any) {
-      console.warn("Error during mock checkout", e);
+      setError(e.message || "Failed to submit application");
     } finally {
-      // setLoading(false) in timeout above if it didn't navigate
+      setLoading(false);
     }
   };
 
@@ -113,15 +143,10 @@ export const ApplyPage: React.FC = () => {
     try {
       setLoading(true);
       setError(null);
-
-      // Bypass backend logic - accept any 6 digit input and move to Pet Step
-      if (otpCode.length === 6) {
-        setStep("pet");
-      } else {
-        setError("Please enter a 6-digit code.");
-      }
+      await verifyOtp(form.getValues("email"), otpCode);
+      setStep("pet");
     } catch (e: any) {
-      setError(e.message ?? "Failed to verify OTP");
+      setError(e.message || "Failed to verify OTP");
     } finally {
       setLoading(false);
     }
@@ -230,21 +255,9 @@ export const ApplyPage: React.FC = () => {
 
               <button
                 type="button"
-                onClick={async () => {
-                  const isValid = await form.trigger([
-                    "fullName",
-                    "primaryAddress",
-                    "dogAtDifferentAddress",
-                    "secondaryAddress",
-                    "email",
-                    "phone",
-                  ]);
-                  if (isValid) {
-                    setStep("verify");
-                    setApplicationId("demo-id-" + Math.floor(Math.random() * 10000));
-                  }
-                }}
-                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#6c3bed] py-3 text-[14px] font-semibold text-white shadow-md shadow-[#6c3bed]/30 transition-all hover:bg-[#5b2bd4] hover:shadow-lg hover:shadow-[#6c3bed]/30 active:scale-[0.98]"
+                onClick={handleSendOtp}
+                disabled={loading}
+                className="mt-6 flex w-full items-center justify-center gap-2 rounded-xl bg-[#6c3bed] py-3 text-[14px] font-semibold text-white shadow-md shadow-[#6c3bed]/30 transition-all hover:bg-[#5b2bd4] hover:shadow-lg hover:shadow-[#6c3bed]/30 active:scale-[0.98] disabled:opacity-70"
               >
                 <ShieldCheck size={18} />
                 Verify Identity
